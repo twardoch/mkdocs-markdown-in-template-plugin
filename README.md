@@ -21,7 +21,7 @@ plugins:
 
 In any HTML template partial, you can now include Markdown enclosed in `{% md %}` and `{% mdend %}`:
 
-``html
+```html
 <article>
 {% md %}
 # Heading
