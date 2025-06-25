@@ -1,31 +1,21 @@
-import os
-import sys
-import re
+import textwrap
 import typing as t
 
-from timeit import default_timer as timer
-from datetime import datetime, timedelta
-
-from mkdocs import utils as mkdocs_utils
-from mkdocs.config import config_options, Config
-from mkdocs.structure.files import File, Files
-from mkdocs.plugins import BasePlugin
-
-import textwrap
-
-import jinja2
 import markdown
+from jinja2 import Environment
 from jinja2.ext import Extension
 from jinja2.nodes import CallBlock, Node
-from jinja2 import Environment
 from jinja2.parser import Parser
+from mkdocs.config import Config
+from mkdocs.plugins import BasePlugin
+from mkdocs.structure.files import Files
 
 
 class MarkdownJinjaExtension(Extension):
-    tags = set(["md"])
+    tags = {"md"}
 
     def __init__(self, env: Environment) -> None:
-        super(MarkdownJinjaExtension, self).__init__(env)
+        super().__init__(env)
         self.markdowner = markdown.Markdown(
             extensions=env.globals.get(
                 "mkdocs_markdown_in_template_plugin_markdown_extensions", []
@@ -52,7 +42,6 @@ class MarkdownJinjaExtension(Extension):
 
 
 class MarkdownInTemplatePlugin(BasePlugin):
-
     config_scheme = ()
 
     def __init__(self) -> None:
@@ -60,9 +49,9 @@ class MarkdownInTemplatePlugin(BasePlugin):
         self.dirs = []
 
     def on_env(self, env: Environment, config: Config, files: Files) -> Environment:
-        env.globals[
-            "mkdocs_markdown_in_template_plugin_markdown_extensions"
-        ] = config.get("markdown_extensions", [])
+        env.globals["mkdocs_markdown_in_template_plugin_markdown_extensions"] = (
+            config.get("markdown_extensions", [])
+        )
         env.globals["mkdocs_markdown_in_template_plugin_mdx_configs"] = config.get(
             "mdx_configs", {}
         )
